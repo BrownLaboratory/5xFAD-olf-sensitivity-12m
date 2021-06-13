@@ -1,0 +1,24 @@
+3x
+
+sensitivity index
+	A higher d′ indicates that the signal can be more readily detected.
+
+Interaction, suggestive of impaired sensitivity in tg females, but not males
+
+             Df Sum Sq Mean Sq F value   Pr(>F)    sex           1    0.8    0.78   0.517    0.473    geno          1    3.7    3.72   2.464    0.117    sex:geno      1   46.0   46.03  30.522 6.13e-08 ***Residuals   381  574.6    1.51                     ---Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1criterion
+	Measure of response bias, lower = more liberal.
+
+interaction, suggests more liberal response bias in tg females
+             Df Sum Sq Mean Sq F value  Pr(>F)    sex           1   0.47   0.467   1.098 0.29547    geno          1   0.36   0.357   0.840 0.36002    sex:geno      1   6.24   6.242  14.668 0.00015 ***Residuals   381 162.13   0.426                    ---Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+5x
+
+sensitivity index
+
+Interaction, suggestive of impaired sensitivity in tg females, but not males
+
+            Df Sum Sq Mean Sq F value   Pr(>F)    sex           1   34.3   34.35  19.969 8.91e-06 ***geno          1    3.9    3.90   2.268    0.132    sex:geno      1   34.1   34.10  19.825 9.59e-06 ***Residuals   866 1489.5    1.72                     ---Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1criterion
+
+Indicative of more conservative response bias in tg mice, driven by the females.
+             Df Sum Sq Mean Sq F value   Pr(>F)    sex           1   31.6  31.550  68.636 4.48e-16 ***geno          1    2.4   2.416   5.256   0.0221 *  sex:geno      1    1.1   1.148   2.497   0.1144    Residuals   866  398.1   0.460                     ---Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
