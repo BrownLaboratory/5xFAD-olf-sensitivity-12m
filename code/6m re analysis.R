@@ -6,22 +6,22 @@ MSdat <- read_csv( '../data/MSc sensitivity.csv'
                    , col_types = 'fdddd')
 MSgeno <- read_csv( '../data/MSc genotypes.csv'
                     , col_types = 'fffff')
-dat6m <- MSdat %>% 
-  left_join(MSgeno) %>% 
-  mutate('geno' = Alz) %>% 
-  group_by(Mouse, Consentration, Block, geno, sex) %>% 
+dat6m <- MSdat %>%
+  left_join(MSgeno) %>%
+  mutate('geno' = Alz) %>%
+  group_by(Mouse, Consentration, Block, geno, sex) %>%
   select(-retinal_degeneration, -dysferlin, -Alz)
 
 
 #### plot acc ####
-datCorrPlot6m <- dat6m %>% 
+datCorrPlot6m <- dat6m %>%
   mutate(block = Block,
-         conc = Consentration) %>% 
-  group_by(block, geno, sex, conc) %>% 
+         conc = Consentration) %>%
+  group_by(block, geno, sex, conc) %>%
   summarise('acc' = mean((Hits + Correct_rejections)/20)
             , 'ciUpper' = smean.cl.boot((Hits + Correct_rejections)/20)[3]
             , 'ciLower' = smean.cl.boot((Hits + Correct_rejections)/20)[2]) %>%
-  ungroup() %>% 
+  ungroup() %>%
   mutate('xPos' = 5 * log10(1/conc) + block + log10(1/conc)
          , 'sex' = ifelse(sex == 'm'
                           , 'Male'
@@ -154,23 +154,23 @@ plotAcc6m <- ggplot(data = filter(datCorrPlot6m
 
 #### Best block ####
 
-bestBlockdat6m <- dat6m %>% 
+bestBlockdat6m <- dat6m %>%
   mutate(day = -log10(Consentration) + 1,
          day = if_else(Block > 5,
                        7,
                        day)) %>%
-  group_by(Mouse, Block, day, geno, sex) %>% 
-  summarise('acc' = (Hits + Correct_rejections)/20) %>% 
-  group_by(Mouse, day, geno, sex) %>% 
+  group_by(Mouse, Block, day, geno, sex) %>%
+  summarise('acc' = (Hits + Correct_rejections)/20) %>%
+  group_by(Mouse, day, geno, sex) %>%
   summarise('maxAcc' = max(acc))
 
-plotBestAcc6m <- bestBlockdat6m %>% 
+plotBestAcc6m <- bestBlockdat6m %>%
   mutate('sex' = ifelse(sex == 'm'
                         , 'Male'
                         , 'Female')
          , 'geno' = ifelse(geno == 'tg'
                            , '5xFAD'
-                           , 'B6SJL')) %>% 
+                           , 'B6SJL')) %>%
   ggplot(aes(x = day,
              y = jitter(maxAcc,
                         factor = 2),
@@ -208,15 +208,15 @@ plotBestAcc6m <- bestBlockdat6m %>%
         , legend.title = element_blank()) +
   coord_cartesian(ylim = c(.2, 1))
 
-plot85Pr6m <- bestBlockdat6m %>% 
+plot85Pr6m <- bestBlockdat6m %>%
   mutate('sex' = ifelse(sex == 'm'
                         , 'Male'
                         , 'Female')
          , 'geno' = ifelse(geno == 'tg'
                            , '5xFAD'
-                           , 'B6SJL')) %>% 
-  group_by(day, geno, sex) %>% 
-  summarise(pr85 = mean(maxAcc >= .85)) %>% 
+                           , 'B6SJL')) %>%
+  group_by(day, geno, sex) %>%
+  summarise(pr85 = mean(maxAcc >= .85)) %>%
   ggplot(aes(x = day,
              y = pr85,
              shape = paste(geno, sex))) +
@@ -254,9 +254,9 @@ plot85Pr6m <- bestBlockdat6m %>%
 
 
 #### sensitivity index last concentration ####
-senDat6m <- dat6m %>% 
-  filter(Consentration == 1e-5) %>% 
-  group_by(Mouse, geno, sex) %>% 
+senDat6m <- dat6m %>%
+  filter(Consentration == 1e-5) %>%
+  group_by(Mouse, geno, sex) %>%
   summarise('hits' = sum(Hits)
             , 'falseAlarms' = sum(10 - Correct_rejections)
             , 'hitRate' = ifelse(hits != 100
@@ -278,13 +278,13 @@ options(na.action = "na.fail")
 deePrimeTable6m <- dredge(mfDeePrime6m)
 deePrimeTable6m
 
-plotDeePrimBox6m <- senDat6m %>% 
+plotDeePrimBox6m <- senDat6m %>%
   mutate('sex' = ifelse(sex == 'm'
                         , 'Male'
                         , 'Female')
          , 'Genotype' = ifelse(geno == 'tg'
                                , '5xFAD'
-                               , 'B6SJL')) %>% 
+                               , 'B6SJL')) %>%
   ggplot(aes(x = paste(Genotype, sex)
              , y = deePrime)) +
   geom_boxplot(fill = 'grey') +
@@ -294,10 +294,10 @@ plotDeePrimBox6m <- senDat6m %>%
 
 #### compare d' of 12m and 6m on final conc ####
 
-senDat12m <- senDat %>% 
-  ungroup() %>% 
+senDat12m <- senDat %>%
+  ungroup() %>%
   mutate('Mouse' = animal
-         , 'age' = '12m') %>% 
+         , 'age' = '12m') %>%
   select(-animal, -pTrials, -nTrials)
 
 senDatAge <- bind_rows(senDat6m, senDat12m)
@@ -325,13 +325,13 @@ aggregate(deePrime ~ age
 
 senDatAge$age <- factor(senDatAge$age, c('6m', '12m'))
 
-senDatAge %>% 
+senDatAge %>%
   mutate('sex' = ifelse(sex == 'm'
                         , 'Male'
                         , 'Female')
          , 'Genotype' = ifelse(geno == 'tg'
                                , '5xFAD'
-                               , 'B6SJL')) %>% 
+                               , 'B6SJL')) %>%
   ggplot(aes(x = paste(Genotype, sex)
              , y = deePrime)) +
   geom_boxplot(fill = 'grey') +
@@ -342,9 +342,9 @@ senDatAge %>%
 
 #### sensitivity all conc ####
 
-senAllDat6m <- dat6m %>% 
-  group_by(Mouse, Consentration, geno, sex) %>% 
-  # filter(Block == 5) %>% 
+senAllDat6m <- dat6m %>%
+  group_by(Mouse, Consentration, geno, sex) %>%
+  # filter(Block == 5) %>%
   summarise('hits' = sum(Hits)
             , 'falseAlarms' = sum(10 - Correct_rejections)
             , 'hitRate' = ifelse(hits != 100
@@ -365,7 +365,7 @@ senAll6mmf <- lme(deePrime ~ geno * sex * Consentration
 
 options(na.action = "na.fail")
 allDeePrimeTable6m <- dredge(senAll6mmf)
-allDeePrimeTable6m  
+allDeePrimeTable6m
 
 allDeePrimeSelected6m <- lme(deePrime ~ sex
                              , data = senAllDat6m
@@ -387,13 +387,13 @@ aggregate(deePrime ~ sex
           , data = senAllDat6m)
 
 
-sen6mDat <- dat6m %>% 
+sen6mDat <- dat6m %>%
   mutate(day = -log10(Consentration) + 1,
          day = if_else(Block > 5,
                        7,
-                       day)) %>% 
-  group_by(Mouse, day, geno, sex) %>% 
-  # filter(Block == 5) %>% 
+                       day)) %>%
+  group_by(Mouse, day, geno, sex) %>%
+  # filter(Block == 5) %>%
   summarise('hits' = sum(Hits)
             , 'falseAlarms' = sum(10 - Correct_rejections)
             , 'hitRate' = ifelse(hits != 100
@@ -407,16 +407,16 @@ sen6mDat <- dat6m %>%
                                 , falseAlarms / 101)
             , 'deePrime' = qnorm(hitRate) - qnorm(faRate))
 
-plotDeePrime6m <- sen6mDat %>% 
-  ungroup() %>% 
+plotDeePrime6m <- sen6mDat %>%
+  ungroup() %>%
   mutate('sex' = ifelse(sex == 'm'
                           , 'Male'
                           , 'Female')
          , 'Genotype' = ifelse(geno == 'tg'
                                , '5xFAD'
-                               , 'B6SJL')) %>% 
-  group_by(geno, sex, day) %>% 
-  # summarise('meanDeePrime' = mean(deePrime)) %>% 
+                               , 'B6SJL')) %>%
+  group_by(geno, sex, day) %>%
+  # summarise('meanDeePrime' = mean(deePrime)) %>%
   ggplot(aes(x = day
              , y = deePrime
              , shape = paste(Genotype, sex))) +
@@ -451,8 +451,8 @@ plotDeePrime6m <- sen6mDat %>%
 
 #### response bias ####
 
-biasDat6m <- dat6m %>% 
-  group_by(Mouse, geno, sex) %>% 
+biasDat6m <- dat6m %>%
+  group_by(Mouse, geno, sex) %>%
   summarise('hits' = sum(Hits)
             , 'falseAlarms' = sum(10 - Correct_rejections)
             , 'hitRate' = ifelse(hits != 350
@@ -466,16 +466,16 @@ biasDat6m <- dat6m %>%
 
 mfRespCrit6m <- lm(respCrit ~ geno * sex
                  , data = biasDat6m)
-respCritTable6m <- dredge(mfRespCrit6m)  
+respCritTable6m <- dredge(mfRespCrit6m)
 respCritTable6m
 
-plotResponseBiasBox6m <- biasDat6m %>% 
+plotResponseBiasBox6m <- biasDat6m %>%
   mutate('sex' = ifelse(sex == 'm'
                         , 'Male'
                         , 'Female')
          , 'Genotype' = ifelse(geno == 'tg'
                                , '5xFAD'
-                               , 'B6SJL')) %>% 
+                               , 'B6SJL')) %>%
   ggplot(aes(x = paste(Genotype, sex)
              , y = respCrit)) +
   geom_boxplot(fill = 'grey') +
@@ -483,8 +483,8 @@ plotResponseBiasBox6m <- biasDat6m %>%
   labs(x = ''
        , y = expression(paste('Response Bias (', italic('c'), ')')))
 
-dat6m %>% 
-  group_by(Mouse, Consentration) %>% 
+dat6m %>%
+  group_by(Mouse, Consentration) %>%
   summarise('hits' = sum(Hits)
             , 'n' = max(Block) * 20
             , 'falseAlarms' = (n/2) - sum(Correct_rejections)
@@ -498,23 +498,23 @@ dat6m %>%
                                falseAlarms / (n/2 + 1),
                                faRate)
             , 'respCrit' = -.5 * (qnorm(hitRate) + qnorm(faRate))
-           ) %>% 
-  group_by(Consentration) %>% 
+           ) %>%
+  group_by(Consentration) %>%
   summarise(mnBias = mean(respCrit))
 
 #### compare bias 6m vs 12m ####
 
-biasDat12m <- biasDat %>% 
-  ungroup() %>% 
+biasDat12m <- biasDat %>%
+  ungroup() %>%
   mutate('Mouse' = animal
-         , 'age' = '12m') %>% 
+         , 'age' = '12m') %>%
   select(-animal, -pTrials, -nTrials)
 
 biasDatAll <- bind_rows(biasDat6m, biasDat12m)
 
 mfRespCritAll <- lm(respCrit ~ geno * sex * age
                    , data = biasDatAll)
-respCritTableAll <- dredge(mfRespCritAll)  
+respCritTableAll <- dredge(mfRespCritAll)
 respCritTableAll
 
 respCritAllSelected <- lm(respCrit ~ sex * age
@@ -538,7 +538,7 @@ biasDatAll %>%
                         , 'Female')
          , 'Genotype' = ifelse(geno == 'tg'
                                , '5xFAD'
-                               , 'B6SJL')) %>% 
+                               , 'B6SJL')) %>%
   ggplot(aes(x = paste(Genotype, sex)
              , y = respCrit)) +
   geom_boxplot(fill = 'grey') +
@@ -549,8 +549,8 @@ biasDatAll %>%
 
 ##### false alarm rate comparison ####
 
-biasDatAll %>% 
-  group_by(age) %>% 
+biasDatAll %>%
+  group_by(age) %>%
   summarise(faMean = mean(faRate),
             faSD = sd(faRate),
             hitMean = mean(hitRate),
@@ -558,9 +558,9 @@ biasDatAll %>%
             critMean = mean(respCrit),
             critSD = sd(respCrit))
 
-datFa6m <- dat6m %>% 
-  group_by(geno, sex, Consentration, Block) %>% 
-  summarise(fa = mean_cl_boot((10 - Correct_rejections)/10)) %>% 
+datFa6m <- dat6m %>%
+  group_by(geno, sex, Consentration, Block) %>%
+  summarise(fa = mean_cl_boot((10 - Correct_rejections)/10)) %>%
   mutate('xPos' = 5 * log10(1/Consentration) + Block + log10(1/Consentration)
                 , 'sex' = ifelse(sex == 'm'
                                  , 'Male'
@@ -569,7 +569,7 @@ datFa6m <- dat6m %>%
                                       , '5xFAD'
                                       , 'B6SJL'))
 
-dat6mFa <- dat6m %>% 
+dat6mFa <- dat6m %>%
   mutate(day = log10(1/Consentration) + 1,
          day = ifelse(Block > 5,
                       day + 1,
@@ -585,7 +585,7 @@ mfSMinus6m <- lme(fa ~ sex * Block * day * geno
                 , method = 'ML')
 dredge(mfSMinus6m)
 
-mSelect <- lme(fa ~ Block + day + sex + Block:day 
+mSelect <- lme(fa ~ Block + day + sex + Block:day
                   , random = ~1|Mouse
                   , data = dat6mFa
                   , method = 'ML')
@@ -596,21 +596,26 @@ mNull <- lme(fa ~ 1
 anova(mSelect, mNull)
 AIC(mSelect, mNull)
 
-dat6mFa %>% 
-  group_by(sex) %>% 
+dat6mFa %>%
+  group_by(geno) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
-dat6mFa %>% 
-  group_by(day) %>% 
+
+dat6mFa %>%
+  group_by(sex) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
-dat6mFa %>% 
-  group_by(Block) %>% 
+dat6mFa %>%
+  group_by(day) %>%
+  summarise(mn = mean(fa),
+            stdDv = sd(fa))
+dat6mFa %>%
+  group_by(Block) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
 # day 1
-dat6mFaD1 <- dat6mFa %>% 
+dat6mFaD1 <- dat6mFa %>%
   filter(day == 1)
 
 mfSMinus6mD1 <- lme(fa ~ sex * Block * geno
@@ -633,13 +638,13 @@ anova(mSMinun6mD1Select, mSMinun6mD1Null)
 AICc(mSMinun6mD1Select, mSMinun6mD1Null)
 
 
-dat6mFaD1 %>% 
-  group_by(Block) %>% 
+dat6mFaD1 %>%
+  group_by(Block) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
 # day 2
-dat6mFaD2 <- dat6mFa %>% 
+dat6mFaD2 <- dat6mFa %>%
   filter(day == 2)
 
 mfSMinus6mD2 <- lme(fa ~ sex * Block * geno
@@ -662,17 +667,17 @@ anova(mSMinun6mD2Select, mSMinun6mD2Null)
 AICc(mSMinun6mD2Select, mSMinun6mD2Null)
 
 
-dat6mFaD2 %>% 
-  group_by(Block) %>% 
+dat6mFaD2 %>%
+  group_by(Block) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
-dat6mFaD2 %>% 
-  group_by(sex) %>% 
+dat6mFaD2 %>%
+  group_by(sex) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
 # day 3
-dat6mFaD3 <- dat6mFa %>% 
+dat6mFaD3 <- dat6mFa %>%
   filter(day == 3)
 
 mfSMinus6mD3 <- lme(fa ~ sex * Block * geno
@@ -694,21 +699,21 @@ mSMinun6mD3Null<- lme(fa ~ 1
 anova(mSMinun6mD3Select, mSMinun6mD3Null)
 AICc(mSMinun6mD3Select, mSMinun6mD3Null)
 
-dat6mFaD3 %>% 
-  group_by(Block) %>% 
+dat6mFaD3 %>%
+  group_by(Block) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
-dat6mFaD3 %>% 
-  group_by(geno) %>% 
+dat6mFaD3 %>%
+  group_by(geno) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
-dat6mFaD3 %>% 
-  group_by(sex) %>% 
+dat6mFaD3 %>%
+  group_by(sex) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
 # day 4
-dat6mFaD4 <- dat6mFa %>% 
+dat6mFaD4 <- dat6mFa %>%
   filter(day == 4)
 
 mfSMinus6mD4 <- lme(fa ~ sex * Block * geno
@@ -731,19 +736,19 @@ anova(mSMinun6mD4Select, mSMinun6mD4Null)
 AICc(mSMinun6mD4Select, mSMinun6mD4Null)
 
 
-dat6mFaD4 %>% 
-  group_by(Block) %>% 
+dat6mFaD4 %>%
+  group_by(Block) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
-dat6mFaD4 %>% 
-  group_by(geno) %>% 
+dat6mFaD4 %>%
+  group_by(geno) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
 
 # day 5
-dat6mFaD5 <- dat6mFa %>% 
+dat6mFaD5 <- dat6mFa %>%
   filter(day == 5)
 
 mfSMinus6mD5 <- lme(fa ~ sex * Block * geno
@@ -765,13 +770,13 @@ mSMinun6mD5Null<- lme(fa ~ 1
 anova(mSMinun6mD5Select, mSMinun6mD5Null)
 AICc(mSMinun6mD5Select, mSMinun6mD5Null)
 
-dat6mFaD5 %>% 
-  group_by(Block) %>% 
+dat6mFaD5 %>%
+  group_by(Block) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
 # day 6
-dat6mFaD6 <- dat6mFa %>% 
+dat6mFaD6 <- dat6mFa %>%
   filter(day == 6)
 
 mfSMinus6mD6 <- lme(fa ~ sex * Block * geno
@@ -795,7 +800,7 @@ AICc(mSMinun6mD6Select, mSMinun6mD6Null)
 
 
 # day 7
-dat6mFaD7 <- dat6mFa %>% 
+dat6mFaD7 <- dat6mFa %>%
   filter(day == 7)
 
 mfSMinus6mD7 <- lme(fa ~ sex * Block * geno
@@ -817,13 +822,13 @@ mSMinun6mD7Null<- lme(fa ~ 1
 anova(mSMinun6mD7Select, mSMinun6mD7Null)
 AICc(mSMinun6mD7Select, mSMinun6mD7Null)
 
-dat6mFaD7 %>% 
-  group_by(Block) %>% 
+dat6mFaD7 %>%
+  group_by(Block) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
-dat6mFaD7 %>% 
-  group_by(geno) %>% 
+dat6mFaD7 %>%
+  group_by(geno) %>%
   summarise(mn = mean(fa),
             stdDv = sd(fa))
 
@@ -919,8 +924,8 @@ plotFa6m <- ggplot(data = filter(datFa6m
 
 #### bias all concentrations ####
 
-biasConcDat6m <- dat6m %>% 
-  group_by(Mouse, Consentration, geno, sex) %>% 
+biasConcDat6m <- dat6m %>%
+  group_by(Mouse, Consentration, geno, sex) %>%
   summarise('hits' = sum(Hits)
             , 'falseAlarms' = sum(10 - Correct_rejections)
             , 'hitRate' = ifelse(hits != 350
@@ -938,12 +943,12 @@ mfBiasConc6m <- lme(respCrit ~ sex * geno * Consentration
     , method = 'ML')
 
 
-dat6m %>% 
+dat6m %>%
   mutate(day = -log10(Consentration) + 1,
          day = if_else(Block > 5,
                        7,
-                       day)) %>% 
-  group_by(Mouse, Day, geno, sex) %>% 
+                       day)) %>%
+  group_by(Mouse, Day, geno, sex) %>%
   summarise('hits' = sum(Hits)
             , 'falseAlarms' = sum(10 - Correct_rejections)
             , 'hitRate' = ifelse(hits != 350
@@ -955,12 +960,12 @@ dat6m %>%
             , 'respCrit' = -.5 * (qnorm(hitRate) + qnorm(faRate))
             , 'age' = '6m')
 
-plotResponseBiasConcBox6m <- dat6m %>% 
+plotResponseBiasConcBox6m <- dat6m %>%
   mutate(day = -log10(Consentration) + 1,
          day = if_else(Block > 5,
                        7,
-                       day)) %>% 
-  group_by(Mouse, day, geno, sex) %>% 
+                       day)) %>%
+  group_by(Mouse, day, geno, sex) %>%
   summarise('hits' = sum(Hits)
             , 'falseAlarms' = sum(10 - Correct_rejections)
             , 'hitRate' = ifelse(hits != 50
@@ -970,16 +975,16 @@ plotResponseBiasConcBox6m <- dat6m %>%
                                 , falseAlarms / 50
                                 , (falseAlarms + 1) / 50)
             , 'respCrit' = -.5 * (qnorm(hitRate) + qnorm(faRate))
-            , 'age' = '6m') %>%  
-  ungroup() %>% 
+            , 'age' = '6m') %>%
+  ungroup() %>%
   mutate('sex' = ifelse(sex == 'm'
                           , 'Male'
                           , 'Female')
          , 'Genotype' = ifelse(geno == 'tg'
                                , '5xFAD'
-                               , 'B6SJL')) %>% 
-  group_by(geno, sex, day) %>% 
-  # summarise('meanDeePrime' = mean(deePrime)) %>% 
+                               , 'B6SJL')) %>%
+  group_by(geno, sex, day) %>%
+  # summarise('meanDeePrime' = mean(deePrime)) %>%
   ggplot(aes(x = day - 1
              , y = respCrit
              , shape = paste(Genotype, sex))) +
@@ -1030,7 +1035,7 @@ anova(mBiasConc6mSelected, mBiasConc6mNull)
 
 #### learning ####
 
-dat6l <- dat6m %>% 
+dat6l <- dat6m %>%
   mutate('acc' = (Hits + Correct_rejections)/20)
 
 mf6mAcc <- lme(acc ~ sex * geno * Block * Consentration
@@ -1085,7 +1090,7 @@ aggregate(acc ~ Block
 
 #### acc 1st conc ####
 
-acc1Dat6m <- dat6l %>% 
+acc1Dat6m <- dat6l %>%
   filter(Consentration == concList[1])
 
 mfAcc1.6m <- lme(acc ~ sex * geno * Block
@@ -1117,7 +1122,7 @@ aggregate(acc ~ sex
 
 #### acc 2nd conc ####
 
-acc2Dat6m <- dat6l %>% 
+acc2Dat6m <- dat6l %>%
   filter(Consentration == concList[2])
 
 mfAcc2.6m <- lme(acc ~ sex * geno * Block
@@ -1164,7 +1169,7 @@ aggregate(acc ~ Block * sex
 
 #### acc 3rd conc ####
 
-acc3Dat6m <- dat6l %>% 
+acc3Dat6m <- dat6l %>%
   filter(Consentration == concList[3])
 
 mfAcc3.6m <- lme(acc ~ sex * geno * Block
@@ -1210,7 +1215,7 @@ aggregate(acc ~ sex
 
 #### acc 4th conc ####
 
-acc4Dat6m <- dat6l %>% 
+acc4Dat6m <- dat6l %>%
   filter(Consentration == concList[4])
 
 mfAcc4.6m <- lme(acc ~ sex * geno * Block
@@ -1249,7 +1254,7 @@ aggregate(acc ~ Block
 
 #### acc 5th conc ####
 
-acc5Dat6m <- dat6l %>% 
+acc5Dat6m <- dat6l %>%
   filter(Consentration == concList[5])
 
 mfAcc5.6m <- lme(acc ~ sex * geno * Block
@@ -1281,7 +1286,7 @@ aggregate(acc ~ Block
 
 #### acc lowest conc day 1 ####
 
-acc6Dat6m <- dat6l %>% 
+acc6Dat6m <- dat6l %>%
   filter(Consentration == concList[6]
          , Block < 6)
 
@@ -1314,7 +1319,7 @@ aggregate(acc ~ Block
 
 #### acc lowest conc day 2 ####
 
-acc7Dat6m <- dat6l %>% 
+acc7Dat6m <- dat6l %>%
   filter(Consentration == concList[6]
          , Block  >5)
 
