@@ -2283,7 +2283,11 @@ ssDat <- dat %>%
 ssDat %>%
   # filter(StudyName != 'SEN1') %>%
   ungroup() %>%
-  select(ShortSamples:deePrime) %>%
+  select(`Short Samples` = ShortSamples,
+         `Hit Rate` = HitRate,
+         `False Alarm Rate` = FARate,
+         `Response Bias` = respBias,
+         `Sensitivity Index` = deePrime) %>%
   chart.Correlation(method = 'spearman')
 
 cor.test(ssDat$ShortSamples, ssDat$HitRate,
