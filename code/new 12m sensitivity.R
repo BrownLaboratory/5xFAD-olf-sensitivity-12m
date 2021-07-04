@@ -2284,6 +2284,7 @@ chart.Correlation.linear <-
   function (R, histogram = TRUE, method=c("pearson", "kendall", "spearman"), ...)
   { # @author R Development Core Team
     # @author modified by Peter Carl & Marek Lahoda
+    # @auther further modified by Kyle Roddick
     # Visualization of a Correlation Matrix. On top the (absolute) value of the correlation plus the result
     # of the cor.test as stars. On botttom, the bivariate scatterplots, with a linear regression fit.
     # On diagonal, the histograms with probability, density and normal density (gaussian) distribution.
