@@ -7,6 +7,7 @@ library(lubridate)
 library(MuMIn)
 library(PerformanceAnalytics)
 library(here)
+library(cowplot)
 
 #### read in data ####
 
@@ -211,7 +212,7 @@ confSelectedCrit
 
 #### plot mice hitting crit ####
 
-dat5xCrit %>%
+plotP85 <- dat5xCrit %>%
   group_by(geno, sex, conc) %>%
   summarise('crit' = mean(Crit)
             , 'ciUpper' = smean.cl.boot(Crit)[3]
@@ -247,7 +248,7 @@ dat5xCrit %>%
           , legend.title = element_blank())
 
 #### plot acc on best block ####
-dat5xSum %>%
+plotBestBlock <- dat5xSum %>%
   mutate('nChar' = nchar(as.character(Podour))
          , 'conc' = as.numeric(substr(Podour, 1, nChar - 6))
          , 'sex' = ifelse(sex == 'm'
@@ -264,6 +265,8 @@ dat5xSum %>%
              , shape = paste(Genotype, sex))) +
   geom_point(size = 2
              , position = position_dodge(width = .4)) +
+  geom_hline(yintercept = .85,
+             linetype = 'dashed') +
   theme_classic() +
   scale_shape_manual(values = c(1, 2, 16, 17)) +
   scale_x_continuous(breaks = 1:6
@@ -2010,6 +2013,21 @@ plotDeePrime12m <- sen12mDat %>%
   theme(legend.position = c(.9, .2)
         , legend.title = element_blank())
 
+plotDeePrimeBox12m <- sen12mDat %>%
+  ungroup() %>%
+  mutate('sex' = ifelse(sex == 'm'
+                        , 'Male'
+                        , 'Female')
+         , 'Genotype' = ifelse(geno == 'tg'
+                               , '5xFAD'
+                               , 'B6SJL')) %>%
+  group_by(Genotype, sex) %>%
+  ggplot(aes(x = paste(Genotype, sex)
+             , y = deePrime)) +
+  geom_boxplot(fill = 'grey') +
+  theme_classic() +
+  labs(x = ''
+       , y = expression(paste('Sensitivity Index (', italic('d\''), ')')))
 
 # model last 4 concentrations
 
@@ -2518,3 +2536,38 @@ ssDat %>%
 ggsave(here('figures', 'newNewPlots', 'shortSamples.png'),
        width = 8.5,
        height = 5.5)
+
+#### Combined plots ####
+
+figure1 <- plot_grid(plotAcc12m, plotBestAcc12m + theme(legend.background = element_blank()), plot85Pr12m,
+          ncol = 1,
+          labels = 'AUTO')
+ggsave(here('figures', 'just12m', 'figure1.png'),
+       figure1,
+       height = 11,
+       width = 5.5)
+
+
+ggsave(here('figures', 'just12m', 'figure2.png'),
+       plotFa12m,
+       height = 5.5,
+       width = 5.5)
+
+
+figure3 <- plot_grid(plotDeePrimeBox12m, plotDeePrime12m,
+                     ncol = 1,
+                     labels = 'AUTO')
+ggsave(here('figures', 'just12m', 'figure3.png'),
+       figure3,
+       height = 8.5,
+       width = 5.5)
+
+
+figure4 <- plot_grid(plotResponseBiasBox12m,
+                     plotResponseBiasConcBox12m + theme(legend.background = element_blank(), legend.position = c(.9,.14)),
+                     ncol = 1,
+                     labels = 'AUTO')
+ggsave(here('figures', 'just12m', 'figure4.png'),
+       figure4,
+       height = 8.5,
+       width = 5.5)
