@@ -290,6 +290,7 @@ plotP85 <- dat5xCrit %>%
 #### plot acc on best block ####
 plotBestBlock <- dat5xSum %>%
   mutate(
+      acc = acc * 100,
     "nChar" = nchar(as.character(Podour)),
     "conc" = as.numeric(substr(Podour, 1, nChar - 6)),
     "sex" = ifelse(sex == "m",
@@ -314,7 +315,7 @@ plotBestBlock <- dat5xSum %>%
     position = position_dodge(width = .4)
   ) +
   geom_hline(
-    yintercept = .85,
+    yintercept = 85,
     linetype = "dashed"
   ) +
   theme_classic() +
@@ -346,36 +347,36 @@ dat5xConc <- dat5x %>%
     )
   )
 # start with full model, this part will be slow
-mfCorrect <- glmer(correct ~ conc * block * geno * sex + (1 | animal),
-  data = dat5xConc,
-  family = binomial,
-  control = glmerControl(
-    optimizer = "bobyqa",
-    optCtrl = list(maxfun = 2e5)
-  )
-)
-
-mNullCorrect <- glmer(correct ~ +(1 | animal),
-  data = dat5xConc,
-  family = binomial,
-  control = glmerControl(
-    optimizer = "bobyqa",
-    optCtrl = list(maxfun = 2e5)
-  )
-)
-
-# takes ~ 3.3h to run
-options(na.action = "na.fail")
-(T1 <- now())
-correctTable <- dredge(mfCorrect)
-now() - T1
-correctTable
-
-# save(correctTable, file = 'correctTable.RData')
-
-anova(mfCorrect, mNullCorrect, test = "Chisq")
-summary(mfCorrect)
-confmfCorrect <- confint(mfCorrect)
+# mfCorrect <- glmer(correct ~ conc * block * geno * sex + (1 | animal),
+#   data = dat5xConc,
+#   family = binomial,
+#   control = glmerControl(
+#     optimizer = "bobyqa",
+#     optCtrl = list(maxfun = 2e5)
+#   )
+# )
+#
+# mNullCorrect <- glmer(correct ~ +(1 | animal),
+#   data = dat5xConc,
+#   family = binomial,
+#   control = glmerControl(
+#     optimizer = "bobyqa",
+#     optCtrl = list(maxfun = 2e5)
+#   )
+# )
+#
+# # takes ~ 3.3h to run
+# options(na.action = "na.fail")
+# (T1 <- now())
+# correctTable <- dredge(mfCorrect)
+# now() - T1
+# correctTable
+#
+# # save(correctTable, file = 'correctTable.RData')
+#
+# anova(mfCorrect, mNullCorrect, test = "Chisq")
+# summary(mfCorrect)
+# confmfCorrect <- confint(mfCorrect)
 
 # save(confmfCorrect, file = 'correctConfInt.RData')
 
@@ -1102,7 +1103,10 @@ plotAcc12m <- ggplot(
   data = filter(
     datCorrPlot,
     conc == 1e0
-  ),
+  ) %>%
+      mutate(acc = 100 * acc,
+             ciUpper = 100 * ciUpper,
+             ciLower = 100 * ciLower),
   aes(
     x = xPos,
     y = acc,
@@ -1123,18 +1127,27 @@ plotAcc12m <- ggplot(
     data = filter(
       datCorrPlot,
       conc == 1e-1
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     size = pointSize
   ) +
   geom_line(data = filter(
     datCorrPlot,
     conc == 1e-1
-  )) +
+  ) %>%
+      mutate(acc = 100 * acc,
+             ciUpper = 100 * ciUpper,
+             ciLower = 100 * ciLower)) +
   geom_errorbar(
     data = filter(
       datCorrPlot,
       conc == 1e-1
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     aes(
       ymin = ciLower,
       ymax = ciUpper
@@ -1146,18 +1159,27 @@ plotAcc12m <- ggplot(
     data = filter(
       datCorrPlot,
       conc == 1e-2
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     size = pointSize
   ) +
   geom_line(data = filter(
     datCorrPlot,
     conc == 1e-2
-  )) +
+  ) %>%
+      mutate(acc = 100 * acc,
+             ciUpper = 100 * ciUpper,
+             ciLower = 100 * ciLower)) +
   geom_errorbar(
     data = filter(
       datCorrPlot,
       conc == 1e-2
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     aes(
       ymin = ciLower,
       ymax = ciUpper
@@ -1169,18 +1191,27 @@ plotAcc12m <- ggplot(
     data = filter(
       datCorrPlot,
       conc == 1e-3
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     size = pointSize
   ) +
   geom_line(data = filter(
     datCorrPlot,
     conc == 1e-3
-  )) +
+  ) %>%
+      mutate(acc = 100 * acc,
+             ciUpper = 100 * ciUpper,
+             ciLower = 100 * ciLower)) +
   geom_errorbar(
     data = filter(
       datCorrPlot,
       conc == 1e-3
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     aes(
       ymin = ciLower,
       ymax = ciUpper
@@ -1192,18 +1223,27 @@ plotAcc12m <- ggplot(
     data = filter(
       datCorrPlot,
       conc == 1e-4
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     size = pointSize
   ) +
   geom_line(data = filter(
     datCorrPlot,
     conc == 1e-4
-  )) +
+  ) %>%
+      mutate(acc = 100 * acc,
+             ciUpper = 100 * ciUpper,
+             ciLower = 100 * ciLower)) +
   geom_errorbar(
     data = filter(
       datCorrPlot,
       conc == 1e-4
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     aes(
       ymin = ciLower,
       ymax = ciUpper
@@ -1216,20 +1256,29 @@ plotAcc12m <- ggplot(
       datCorrPlot,
       conc == 1e-5,
       block < 6
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     size = pointSize
   ) +
   geom_line(data = filter(
     datCorrPlot,
     conc == 1e-5,
     block < 6
-  )) +
+  ) %>%
+      mutate(acc = 100 * acc,
+             ciUpper = 100 * ciUpper,
+             ciLower = 100 * ciLower)) +
   geom_errorbar(
     data = filter(
       datCorrPlot,
       conc == 1e-5,
       block < 6
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     aes(
       ymin = ciLower,
       ymax = ciUpper
@@ -1242,20 +1291,29 @@ plotAcc12m <- ggplot(
       datCorrPlot,
       conc == 1e-5,
       block >= 6
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     size = pointSize
   ) +
   geom_line(data = filter(
     datCorrPlot,
     conc == 1e-5,
     block >= 6
-  )) +
+  ) %>%
+      mutate(acc = 100 * acc,
+             ciUpper = 100 * ciUpper,
+             ciLower = 100 * ciLower)) +
   geom_errorbar(
     data = filter(
       datCorrPlot,
       conc == 1e-5,
       block >= 6
-    ),
+    ) %>%
+        mutate(acc = 100 * acc,
+               ciUpper = 100 * ciUpper,
+               ciLower = 100 * ciLower),
     aes(
       ymin = ciLower,
       ymax = ciUpper
@@ -1268,7 +1326,7 @@ plotAcc12m <- ggplot(
   theme_classic() +
   scale_shape_manual(values = c(17, 16, 2, 1)) + # c(1, 2, 16, 17)) +
   scale_linetype_manual(values = c("dashed", "dashed", "solid", "solid")) +
-  scale_y_continuous(breaks = seq(.4, 1, by = .1)) +
+  scale_y_continuous(breaks = seq(40, 100, by = 10)) +
   scale_x_continuous(
     breaks = axisBreaks,
     labels = c(
@@ -1339,7 +1397,7 @@ mSelectedLowest <- glmer(correct ~ block + geno + sex + block:geno + block:sex +
 
 anova(mSelectedLowest, mNullLowest, test = "Chisq")
 summary(mSelectedLowest)
-confint(mSelectedLowest)
+# confint(mSelectedLowest)
 # 2.5 %      97.5 %
 #   .sig01        0.94530523  1.74915815
 # (Intercept)   1.80788476  3.92085305
@@ -1522,6 +1580,7 @@ summary(mSexBest)
 
 plotBestAcc12m <- bestBlockdat %>%
   mutate(
+      maxAcc = 100 * maxAcc,
     "sex" = ifelse(sex == "m",
       "Male",
       "Female"
@@ -1540,7 +1599,7 @@ plotBestAcc12m <- bestBlockdat %>%
   )) +
   geom_point(position = position_dodge(width = .5)) +
   geom_hline(
-    yintercept = .85,
+    yintercept = 85,
     linetype = "dashed"
   ) +
   theme_classic() +
@@ -1585,7 +1644,7 @@ plotBestAcc12m <- bestBlockdat %>%
     legend.position = c(.8, .2),
     legend.title = element_blank()
   ) +
-  coord_cartesian(ylim = c(.2, 1))
+  coord_cartesian(ylim = c(20, 100))
 
 plot85Pr12m <- bestBlockdat %>%
   mutate(
@@ -2081,7 +2140,8 @@ plotFa12m <- ggplot(
   data = filter(
     sMinusSdat,
     day == 1
-  ),
+  ) %>%
+    mutate(fa = 100 * fa),
   aes(
     x = xPos,
     y = fa$y,
@@ -2094,7 +2154,8 @@ plotFa12m <- ggplot(
   geom_point(size = pointSize) +
   geom_line() +
   geom_errorbar(
-    data = sMinusSdat,
+    data = sMinusSdat %>%
+        mutate(fa = 100 * fa),
     linetype = 1,
     width = .5
   ) +
@@ -2102,68 +2163,80 @@ plotFa12m <- ggplot(
     data = filter(
       sMinusSdat,
       day == 2
-    ),
+    ) %>%
+        mutate(fa = 100 * fa),
     size = pointSize
   ) +
   geom_line(data = filter(
     sMinusSdat,
     day == 2
-  )) +
+  ) %>%
+      mutate(fa = 100 * fa)) +
   geom_point(
     data = filter(
       sMinusSdat,
       day == 3
-    ),
+    ) %>%
+        mutate(fa = 100 * fa),
     size = pointSize
   ) +
   geom_line(data = filter(
     sMinusSdat,
     day == 3
-  )) +
+  ) %>%
+      mutate(fa = 100 * fa)) +
   geom_point(
     data = filter(
       sMinusSdat,
       day == 4
-    ),
+    ) %>%
+        mutate(fa = 100 * fa),
     size = pointSize
   ) +
   geom_line(data = filter(
     sMinusSdat,
     day == 4
-  )) +
+  ) %>%
+      mutate(fa = 100 * fa)) +
   geom_point(
     data = filter(
       sMinusSdat,
       day == 5
-    ),
+    ) %>%
+        mutate(fa = 100 * fa),
     size = pointSize
   ) +
   geom_line(data = filter(
     sMinusSdat,
     day == 5
-  )) +
+  ) %>%
+      mutate(fa = 100 * fa)) +
   geom_point(
     data = filter(
       sMinusSdat,
       day == 6
-    ),
+    ) %>%
+        mutate(fa = 100 * fa),
     size = pointSize
   ) +
   geom_line(data = filter(
     sMinusSdat,
     day == 6
-  )) +
+  ) %>%
+      mutate(fa = 100 * fa)) +
   geom_point(
     data = filter(
       sMinusSdat,
       day == 7
-    ),
+    ) %>%
+        mutate(fa = 100 * fa),
     size = pointSize
   ) +
   geom_line(data = filter(
     sMinusSdat,
     day == 7
-  )) +
+  ) %>%
+      mutate(fa = 100 * fa)) +
   # geom_hline(aes(yintercept = .85)
   #            , linetype = 'dotted') +
   theme_classic() +
@@ -2878,7 +2951,7 @@ plotResponseBiasConcBox12m <- biasConcDat %>%
     )
   ) +
   labs(
-    y = expression(paste("Response Bias (", italic("c'"), ")")),
+    y = expression(paste("Response Bias (", italic("c"), ")")),
     x = "Odour Concentration (ppm)",
     shape = ""
   ) +
