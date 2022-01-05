@@ -2452,10 +2452,10 @@ timeDatS %>%
   )) +
   geom_point()
 
-#### sensitivity index for last conc ####
+#### sensitivity index for last day ####
 
 senDat <- dat5x %>%
-  filter(StudyName %in% c("SEN6", "SEN7")) %>%
+  filter(StudyName %in% "SEN7") %>%
   group_by(animal, geno, sex) %>%
   summarise(
     "hits" = sum(correct[TrialType == "P"]),
@@ -2728,9 +2728,10 @@ sen5mf <- lme(deePrime ~ geno * sex * conc,
 
 dredge(sen5mf)
 
-#### response bias for all ####
+#### response bias for last day ####
 
 biasDat <- dat5x %>%
+  filter(StudyName == "SEN7") %>%
   group_by(animal, geno, sex) %>%
   summarise(
     "hits" = sum(correct[TrialType == "P"]),
@@ -3113,8 +3114,8 @@ ssDat %>%
     `Short Samples` = ShortSamples,
     `Hit Rate` = HitRate,
     `False Alarm Rate` = FARate,
-    `Response Bias` = respBias,
-    `Sensitivity Index` = deePrime
+    # `Response Bias` = respBias,
+    # `Sensitivity Index` = deePrime
   ) %>%
   chart.Correlation.linear(method = "spearman")
 
