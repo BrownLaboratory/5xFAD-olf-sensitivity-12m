@@ -3327,7 +3327,7 @@ ggsave(here("figures", "newNewPlots", "shortSamples.png"),
 
 ggsave(here("figures", "just12m", "figure1.png"),
   plotDeePrimeBox12m,
-  height = 11,
+  height = 5.5,
   width = 5.5
 )
 
@@ -3346,7 +3346,7 @@ ggsave(here("figures", "just12m", "figure2.png"),
 
 ggsave(here("figures", "just12m", "figure3.png"),
   plotAcc12m,
-  height = 8.5,
+  height = 5.5,
   width = 5.5
 )
 
