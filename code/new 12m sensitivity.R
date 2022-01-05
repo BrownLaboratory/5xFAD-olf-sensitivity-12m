@@ -3318,42 +3318,46 @@ ggsave(here("figures", "newNewPlots", "shortSamples.png"),
 
 #### Combined plots ####
 
-figure1 <- plot_grid(plotAcc12m, plotBestAcc12m + theme(legend.background = element_blank()), plot85Pr12m,
-  ncol = 1,
-  labels = "AUTO"
-)
+# figure1 <- plot_grid(plotAcc12m, plotBestAcc12m + theme(legend.background = element_blank()), plot85Pr12m,
+#   ncol = 1,
+#   labels = "AUTO"
+# )
+
+
+
 ggsave(here("figures", "just12m", "figure1.png"),
-  figure1,
+  plotDeePrimeBox12m,
   height = 11,
   width = 5.5
 )
 
 
 ggsave(here("figures", "just12m", "figure2.png"),
-  plotFa12m,
+  plotResponseBiasBox12m,
   height = 5.5,
   width = 5.5
 )
 
 
-figure3 <- plot_grid(plotDeePrimeBox12m, plotDeePrime12m,
-  ncol = 1,
-  labels = "AUTO"
-)
+# figure3 <- plot_grid(plotDeePrimeBox12m, plotDeePrime12m,
+#   ncol = 1,
+#   labels = "AUTO"
+# )
+
 ggsave(here("figures", "just12m", "figure3.png"),
-  figure3,
+  plotAcc12m,
   height = 8.5,
   width = 5.5
 )
 
 
-figure4 <- plot_grid(plotResponseBiasBox12m,
-  plotResponseBiasConcBox12m + theme(legend.background = element_blank(), legend.position = c(.9, .14)),
-  ncol = 1,
-  labels = "AUTO"
-)
-ggsave(here("figures", "just12m", "figure4.png"),
-  figure4,
-  height = 8.5,
-  width = 5.5
-)
+# figure4 <- plot_grid(plotResponseBiasBox12m,
+#   plotResponseBiasConcBox12m + theme(legend.background = element_blank(), legend.position = c(.9, .14)),
+#   ncol = 1,
+#   labels = "AUTO"
+# )
+# ggsave(here("figures", "just12m", "figure4.png"),
+#   figure4,
+#   height = 8.5,
+#   width = 5.5
+# )
