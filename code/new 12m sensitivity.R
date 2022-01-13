@@ -3325,17 +3325,19 @@ ggsave(here("figures", "newNewPlots", "shortSamples.png"),
 
 
 
-ggsave(here("figures", "just12m", "figure1.png"),
+ggsave(here("figures", "just12m", "figure1.eps"),
   plotDeePrimeBox12m,
   height = 5.5,
-  width = 5.5
+  width = 5.5,
+  dpi = 1200
 )
 
 
-ggsave(here("figures", "just12m", "figure2.png"),
+ggsave(here("figures", "just12m", "figure2.eps"),
   plotResponseBiasBox12m,
   height = 5.5,
-  width = 5.5
+  width = 5.5,
+  dpi = 1200
 )
 
 
@@ -3344,10 +3346,11 @@ ggsave(here("figures", "just12m", "figure2.png"),
 #   labels = "AUTO"
 # )
 
-ggsave(here("figures", "just12m", "figure3.png"),
+ggsave(here("figures", "just12m", "figure3.eps"),
   plotAcc12m,
   height = 5.5,
-  width = 5.5
+  width = 5.5,
+  dpi = 1200
 )
 
 
