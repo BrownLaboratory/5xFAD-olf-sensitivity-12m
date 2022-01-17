@@ -1099,6 +1099,78 @@ axisBreaks <- c((5 * log10(1 / concList) + 3 + log10(1 / concList))[1:5], 35.5)
 #### plot 12m accuracy per conc ####
 
 pointSize <- 2
+
+test_multi_plot_acc <-
+    datCorrPlot %>%
+    mutate(acc = 100 * acc,
+           ciUpper = 100 * ciUpper,
+           ciLower = 100 * ciLower,
+           conc = conc %>% as.factor %>% fct_inseq() %>% fct_rev()) %>%
+    ggplot(aes(x = xPos,
+               y = acc,
+               shape = paste(Genotype, sex),
+               linetype = paste(Genotype, sex))) +
+    geom_point(size = pointSize) +
+    geom_line() +
+    geom_errorbar(aes(
+        ymin = ciLower,
+        ymax = ciUpper
+    ),
+    linetype = 1,
+    width = .5
+    ) +
+    facet_wrap(vars(conc),
+               scales = "free_x") +
+    theme_classic() +
+    scale_shape_manual(values = c(17, 16, 2, 1)) + # c(1, 2, 16, 17)) +
+    scale_linetype_manual(values = c("dashed", "dashed", "solid", "solid")) +
+    scale_y_continuous(breaks = seq(40, 100, by = 10)) +
+    scale_x_continuous(
+        breaks = axisBreaks,
+        labels = c(
+            format(concList[1],
+                   nsmall = 0,
+                   scientific = FALSE
+            ),
+            format(concList[2],
+                   nsmall = 0,
+                   scientific = FALSE
+            ),
+            format(concList[3],
+                   nsmall = 0,
+                   scientific = FALSE
+            ),
+            format(concList[4],
+                   nsmall = 0,
+                   scientific = FALSE
+            ),
+            format(concList[5],
+                   nsmall = 0,
+                   scientific = FALSE
+            ),
+            format(concList[6],
+                   nsmall = 0,
+                   scientific = FALSE
+            )
+        )
+    ) +
+    labs(
+        y = "Accuracy (%)",
+        x = "Odour Concentration (ppm)",
+        linetype = "Genotype",
+        shape = "Genotype",
+        colour = "Sex"
+    ) +
+    theme(
+        legend.position = c(.9, .7),
+        legend.title = element_blank(),
+        legend.background = element_blank(),
+        strip.background = element_blank(),
+        strip.text.x = element_blank()
+    )
+
+
+
 plotAcc12m <- ggplot(
   data = filter(
     datCorrPlot,
