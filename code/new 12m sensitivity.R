@@ -1166,7 +1166,8 @@ test_multi_plot_acc <-
         legend.title = element_blank(),
         legend.background = element_blank(),
         strip.background = element_blank(),
-        strip.text.x = element_blank()
+        strip.text.x = element_blank(),
+        axis.ticks.x = element_blank()
     )
 
 
