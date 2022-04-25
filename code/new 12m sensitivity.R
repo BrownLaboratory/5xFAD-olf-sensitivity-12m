@@ -1442,6 +1442,22 @@ plotAcc12m <- ggplot(
   )
 
 
+plotAcc12mGeno <- plotAcc12m +
+    facet_grid(rows = vars(Genotype)) +
+    theme_bw() +
+    theme(legend.position = c(.8, .12),
+          legend.background = element_blank(),
+          legend.title = element_blank(),
+          panel.grid = element_blank())
+
+plotAcc12mSex <- plotAcc12m +
+    facet_grid(rows = vars(sex)) +
+    theme_bw() +
+    theme(legend.position = c(.8, .12),
+          legend.background = element_blank(),
+          legend.title = element_blank(),
+          panel.grid = element_blank())
+
 
 #### model correct for lowest conc ####
 dat5xLowest <- dat5xConc %>%
@@ -3426,6 +3442,19 @@ ggsave(here("figures", "just12m", "figure3.eps"),
   dpi = 1200
 )
 
+ggsave(here("figures", "just12m", "figure3.2.eps"),
+       plotAcc12mGeno,
+       height = 5.5,
+       width = 5.5,
+       dpi = 1200
+)
+
+ggsave(here("figures", "just12m", "figure3.3.eps"),
+       plotAcc12mSex,
+       height = 5.5,
+       width = 5.5,
+       dpi = 1200
+)
 
 # figure4 <- plot_grid(plotResponseBiasBox12m,
 #   plotResponseBiasConcBox12m + theme(legend.background = element_blank(), legend.position = c(.9, .14)),
