@@ -1,4 +1,4 @@
-[![DOI:](https://img.shields.io/badge/doi%3A-10.3233%2FJAD--220049-brightgreen)](https:/doi.org/10.3233/JAD-220049)]
+[!(https://img.shields.io/badge/doi%3A-10.3233%2FJAD--220049-brightgreen)](https:/doi.org/10.3233/JAD-220049)
 
 # A Signal Detection Analysis of Olfactory Learning in 12-Month-Old 5xFAD Mice
 
