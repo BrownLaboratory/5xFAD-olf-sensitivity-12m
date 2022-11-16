@@ -1,4 +1,11 @@
-# 5xFAD-olf-sensitivity-12m
+[![](https://img.shields.io/badge/doi%3A-10.3233%2FJAD--220049-brightgreen)](https://doi.org/10.3233/JAD-220049)
 
+# A Signal Detection Analysis of Olfactory Learning in 12-Month-Old 5xFAD Mice
 
-Although Alzheimer’s disease (AD) is most often defined in terms of memory impairments, olfactory dysfunction occurs in the early stages and can be used to predict the progression from mild cognitive impairment to the most severe Braak stages of AD.  In this study we tested olfactory learning, sensitivity, and response bias using signal detection methods in 12-month-old male and female 5xFAD mice and their wildtype controls in the operant olfactometer.  While olfactory sensitivity was not reduced in the 5xFAD mice, there were learning deficits, which were worse in female 5xFAD mice than in males. Moreover, female mice (both 5xFAD and wildtype) were more conservative in their response strategy than male mice. There were no genotype differences in response bias but the WT mice had a higher false alarm rate than the 5xFAD mice and males had a higher false alarm rate than females. The signal detection analysis showed that errors were primarily due to the number of false alarms, as occurs in Alzheimer patients. The signal detection analysis is valuable for analyzing the decision processes in these mice.
+Journal of Alzheimer's Disease, vol. 88, no. 1, pp. 37-44, 2022
+
+doi: 10.3233/JAD-220049
+
+[article](https://content.iospress.com/articles/journal-of-alzheimers-disease/jad220049)
+
+Although Alzheimer’s disease is most often studied in terms of memory impairments, olfactory dysfunction begins in the early stages. We tested olfactory learning, sensitivity, and response bias using signal detection methods in 12-month-old male and female 5xFAD mice and their wildtype controls in the operant olfactometer. Odor detection was not reduced in the 5xFAD mice, but learning was, which was worse in female 5xFAD mice than in males. Female mice were more conservative in their response strategy. Signal detection analysis allows us to discriminate between cognitive and sensory deficits of male and female mouse models of AD.
